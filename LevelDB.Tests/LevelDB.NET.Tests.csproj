@@ -4,6 +4,8 @@
     <TargetFrameworks>net472;net5.0</TargetFrameworks>
 
     <IsPackable>false</IsPackable>
+
+    <Platforms>x86;x64</Platforms>
   </PropertyGroup>
 
   <ItemGroup>
