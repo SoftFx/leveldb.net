@@ -4,3 +4,4 @@ obj
 *.suo
 syntax: regexp
 packages/.*[0-9].*
+.vs/
