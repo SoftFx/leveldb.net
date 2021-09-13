@@ -15,6 +15,9 @@ namespace LevelDB
     {
         Options Options;
 
+        private readonly WriteOptions _writeOptions = new WriteOptions();
+        private readonly ReadOptions  _readOptions  = new ReadOptions();
+
         /// <summary>
         /// Open the database with the specified "name".
         /// </summary>
@@ -89,7 +92,7 @@ namespace LevelDB
         /// </summary>
         public void Put(string key, string value)
         {
-            Put(key, value, new WriteOptions());
+            Put(key, value, _writeOptions);
         }
 
         /// <summary>
@@ -105,7 +108,7 @@ namespace LevelDB
         /// </summary>
         public void Put(byte[] key, byte[] value)
         {
-            Put(key, value, new WriteOptions());
+            Put(key, value, _writeOptions);
         }
 
         /// <summary>
@@ -126,7 +129,7 @@ namespace LevelDB
         /// </summary>
         public void Delete(string key)
         {
-            Delete(key, new WriteOptions());
+            Delete(key, _writeOptions);
         }
 
         /// <summary>
@@ -144,7 +147,7 @@ namespace LevelDB
         /// </summary>
         public void Delete(byte[] key)
         {
-            Delete(key, new WriteOptions());
+            Delete(key, _writeOptions);
         }
 
         /// <summary>
@@ -162,7 +165,7 @@ namespace LevelDB
 
         public void Write(WriteBatch batch)
         {
-            Write(batch, new WriteOptions());
+            Write(batch, _writeOptions);
         }
 
         public void Write(WriteBatch batch, WriteOptions options)
@@ -181,7 +184,7 @@ namespace LevelDB
         /// </summary>
         public string Get(string key)
         {
-            return Get(key, new ReadOptions());
+            return Get(key, _readOptions);
         }
 
         /// <summary>
@@ -200,7 +203,7 @@ namespace LevelDB
         /// </summary>
         public byte[] Get(byte[] key)
         {
-            return Get(key, new ReadOptions());
+            return Get(key, _readOptions);
         }
 
         /// <summary>
@@ -239,7 +242,7 @@ namespace LevelDB
         /// </summary>
         public Iterator CreateIterator()
         {
-            return this.CreateIterator(new ReadOptions());
+            return this.CreateIterator(_readOptions);
         }
 
         /// <summary>
