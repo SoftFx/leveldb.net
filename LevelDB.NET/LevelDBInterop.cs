@@ -12,30 +12,23 @@ namespace LevelDB
     {
         static LevelDBInterop()
         {
-            var name = IntPtr.Size == 4 ? "LevelDB32" : "LevelDB64";
+            var name = Environment.Is64BitProcess ? "LevelDB64" : "LevelDB32";
             var assembly = Assembly.GetExecutingAssembly();
-            var folder = Path.Combine(Path.GetTempPath(), "LevelDB.NET-" + assembly.GetName().Version.ToString(), name);
-            Directory.CreateDirectory(folder);
-            var path = Path.Combine(folder, "LevelDB.dll");
+            var path = Path.Combine(Path.GetDirectoryName(assembly.Location), "LevelDB.dll");
             byte[] contents;
-            using (var input = assembly.GetManifestResourceStream("LevelDB." + name + ".dll"))
-            using (var buffer = new MemoryStream())
+            using (var input = assembly.GetManifestResourceStream("LevelDB.NET." + name + ".dll"))
             {
-                byte[] block = new byte[4096];
-                int copied;
-                while ((copied = input.Read(block, 0, block.Length)) != 0)
-                    buffer.Write(block, 0, copied);
-                buffer.Close();
-                contents = buffer.ToArray();
+                contents = new byte[input.Length];
+                input.Read(contents, 0, (int)input.Length);
             }
+
             if (!File.Exists(path) || !BuffersEqual(File.ReadAllBytes(path), contents))
             {
-                using (var output = File.Open(path, FileMode.Create, FileAccess.Write, FileShare.None))
-                    output.Write(contents, 0, contents.Length);
+                File.WriteAllBytes(path, contents);
             }
             var h = LoadLibrary(path);
             if (h == IntPtr.Zero)
-                throw new ApplicationException("Cannot load " + name + ".dll");
+                throw new ApplicationException("Cannot load leveldb.dll");
         }
 
         static bool BuffersEqual(byte[] left, byte[] right)
