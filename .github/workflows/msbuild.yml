@@ -33,8 +33,8 @@ jobs:
       
     - name: Test x86
       run: dotnet test --verbosity normal --framework net472 --runtime win-x86
-      working-directory:  ${{env.GITHUB_WORKSPACE}}/LevelDB.Tests/
+      working-directory: LevelDB.Tests/
       
     - name: Test x64
       run: dotnet test --verbosity normal --framework net472 --runtime win-x64
-      working-directory:  ${{env.GITHUB_WORKSPACE}}/LevelDB.Tests/
+      working-directory: LevelDB.Tests/
