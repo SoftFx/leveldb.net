@@ -10,7 +10,7 @@ namespace LevelDB.NET.Tests
     [TestFixture]
     public class LevelDBTests
     {
-        static string testPath = Directory.GetCurrentDirectory() + "/Test";
+        static string testPath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "Test");
 
         [OneTimeTearDown]
         public void OneTimeTearDown()
