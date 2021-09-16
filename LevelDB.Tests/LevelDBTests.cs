@@ -1,14 +1,23 @@
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 
 namespace LevelDB.NET.Tests
 {
     [TestFixture]
     public class LevelDBTests
     {
-        static string testPath = @"C:\FTHistory\Test";
+        static string testPath = Directory.GetCurrentDirectory() + "/Test";
+
+        [OneTimeTearDown]
+        public void OneTimeTearDown()
+        {
+            Directory.Delete(testPath, true);
+        }
+
         static string CleanTestDB()
         {
             DB.Destroy(testPath, new Options { CreateIfMissing = true });
@@ -71,7 +80,6 @@ namespace LevelDB.NET.Tests
                 }
 
                 CollectionAssert.AreEqual(expected, actual);
-
             }
         }
 
@@ -120,7 +128,6 @@ namespace LevelDB.NET.Tests
 
                 // can see the change now
                 Assert.AreEqual(db.Get("New York"), "blue");
-
             }
         }
 
