@@ -10,7 +10,7 @@ This project is .net wrapper around windows port of leveldb taken from https://b
 LevelDB.Standard is available as a NuGet package:
 
 ```
-PM> Install-Package LevelDB.Standard
+PM> Install-Package SoftFx.LevelDB.Standard
 ```
 
 # Getting Started #
