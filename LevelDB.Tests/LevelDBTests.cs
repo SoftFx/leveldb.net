@@ -56,16 +56,6 @@ namespace LevelDB.NET.Tests
         }
 
         [Test]
-        public void Error()
-        {
-            var options = new Options()
-            {
-                CreateIfMissing = false
-            };
-            Assert.That(() => new DB("non-existent", options), Throws.TypeOf<LevelDBException>());
-        }
-
-        [Test]
         public void TestCRUD()
         {
             Database.Put("Tampa", "green");
@@ -210,5 +200,4 @@ namespace LevelDB.NET.Tests
         }
 
     }
-
 }
