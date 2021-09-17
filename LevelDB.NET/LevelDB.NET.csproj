@@ -4,6 +4,17 @@
     <FileUpgradeFlags>40</FileUpgradeFlags>
     <OldToolsVersion>15.0</OldToolsVersion>
     <UpgradeBackupLocation>C:\Users\siarhei.hanich\source\repos\leveldb.net\Backup1\</UpgradeBackupLocation>
+    <Company>Soft-Fx</Company>
+    <Authors>Siarhei Hanich</Authors>
+    <Description>Open source leveldb wrapper for Windows using .NET Standard 2.0</Description>
+    <PackageTags>#leveldb</PackageTags>
+    <RepositoryUrl>https://github.com/SoftFx/leveldb.net</RepositoryUrl>
+    <PackageId>SoftFX.LevelDB.NET</PackageId>
+    <PackageProjectUrl>https://github.com/SoftFx/leveldb.net</PackageProjectUrl>
+    <PackageReleaseNotes></PackageReleaseNotes>
+    <Copyright></Copyright>
+    <PackageLicenseExpression>MPL-2.0</PackageLicenseExpression>
+    <Product>Soft-Fx.LevelDB.NET</Product>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
