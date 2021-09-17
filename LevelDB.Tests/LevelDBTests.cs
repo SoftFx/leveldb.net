@@ -129,7 +129,7 @@ namespace LevelDB.NET.Tests
             {
                 var readOptions = new ReadOptions { Snapshot = snapShot };
 
-            Database.Put("New York", "blue");
+                Database.Put("New York", "blue");
 
                 Assert.AreEqual(Database.Get("Tampa", readOptions), "green");
                 Assert.AreEqual(Database.Get("London", readOptions), "red");
