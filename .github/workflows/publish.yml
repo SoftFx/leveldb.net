@@ -25,7 +25,7 @@ jobs:
       run: dotnet build --configuration Release --no-restore
       working-directory: ${{env.GITHUB_WORKSPACE}}
 
-    - name: Publish SharpRpc.Core
+    - name: Publish SoftFx.LevelDB.NET
       uses: brandedoutcast/publish-nuget@v2.5.2
       with:
           PROJECT_FILE_PATH: LevelDB.NET/LevelDB.NET.csproj
