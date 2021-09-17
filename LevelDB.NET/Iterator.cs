@@ -16,11 +16,13 @@ namespace LevelDB
             Handle = handle;
         }
 
+        public bool IsValid => Valid();
+
         /// <summary>
         /// An iterator is either positioned at a key/value pair, or
-        /// not valid.  
+        /// not valid.
         /// </summary>
-        /// <returns>This method returns true iff the iterator is valid.</returns>
+        /// <returns>This method returns true if the iterator is valid.</returns>
         public bool Valid()
         {
             var result = LevelDBInterop.leveldb_iter_valid(Handle) != 0;

@@ -10,7 +10,7 @@ namespace LevelDB
     /// </summary>
     public abstract class LevelDBHandle : IDisposable
     {
-        bool Disposed;
+        protected bool Disposed;
 
         public IntPtr Handle { protected set; get; }
 

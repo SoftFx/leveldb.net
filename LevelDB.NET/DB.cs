@@ -116,6 +116,7 @@ namespace LevelDB
         /// </summary>
         public void Put(byte[] key, byte[] value, WriteOptions options)
         {
+            CheckDisposed();
             IntPtr error;
             LevelDBInterop.leveldb_put(this.Handle, options.Handle, key, (IntPtr)key.Length, value, (IntPtr)value.LongLength, out error);
             LevelDBException.Check(error);
@@ -156,6 +157,7 @@ namespace LevelDB
         /// </summary>
         public void Delete(byte[] key, WriteOptions options)
         {
+            CheckDisposed();
             IntPtr error;
             LevelDBInterop.leveldb_delete(this.Handle, options.Handle, key, (IntPtr)key.Length, out error);
             LevelDBException.Check(error);
@@ -170,6 +172,7 @@ namespace LevelDB
 
         public void Write(WriteBatch batch, WriteOptions options)
         {
+            CheckDisposed();
             IntPtr error;
             LevelDBInterop.leveldb_write(this.Handle, options.Handle, batch.Handle, out error);
             LevelDBException.Check(error);
@@ -212,6 +215,7 @@ namespace LevelDB
         /// </summary>
         public unsafe byte[] Get(byte[] key, ReadOptions options)
         {
+            CheckDisposed();
             IntPtr error;
             IntPtr lengthPtr;
             var valuePtr = LevelDBInterop.leveldb_get(this.Handle, options.Handle, key, (IntPtr)key.Length, out lengthPtr, out error);
@@ -252,6 +256,7 @@ namespace LevelDB
         /// </summary>
         public Iterator CreateIterator(ReadOptions options)
         {
+            CheckDisposed();
             var result = new Iterator(LevelDBInterop.leveldb_create_iterator(this.Handle, options.Handle));
             GC.KeepAlive(options);
             GC.KeepAlive(this);
@@ -264,6 +269,7 @@ namespace LevelDB
         /// </summary>
         public SnapShot CreateSnapshot()
         {
+            CheckDisposed();
             var result = new SnapShot(LevelDBInterop.leveldb_create_snapshot(this.Handle), this);
             GC.KeepAlive(this);
             return result;
@@ -284,6 +290,7 @@ namespace LevelDB
         /// </summary>
         public string PropertyValue(string name)
         {
+            CheckDisposed();
             var ptr = LevelDBInterop.leveldb_property_value(this.Handle, name);
             if (ptr == IntPtr.Zero)
                 return null;
@@ -339,6 +346,7 @@ namespace LevelDB
         /// <param name="limitKey"></param>
         public void CompactRange(byte[] startKey, byte[] limitKey)
         {
+            CheckDisposed();
             LevelDBInterop.leveldb_compact_range(Handle, startKey, LevelDBInterop.MarshalSize(startKey),
                 limitKey, LevelDBInterop.MarshalSize(limitKey));
             GC.KeepAlive(this);
@@ -375,6 +383,7 @@ namespace LevelDB
         /// <returns></returns>
         public unsafe long GetApproximateSize(byte[] startKey, byte[] limitKey)
         {
+            CheckDisposed();
             IntPtr l1 = (IntPtr)startKey.Length;
             IntPtr l2 = (IntPtr)limitKey.Length;
             long[] sizes = new long[1];
@@ -405,6 +414,7 @@ namespace LevelDB
 
         IEnumerator<KeyValuePair<string, string>> IEnumerable<KeyValuePair<string, string>>.GetEnumerator()
         {
+            CheckDisposed();
             using (var sn = this.CreateSnapshot())
             using (var iterator = this.CreateIterator(new ReadOptions { Snapshot = sn }))
             {
@@ -419,6 +429,7 @@ namespace LevelDB
 
         public IEnumerator<KeyValuePair<byte[], byte[]>> GetEnumerator()
         {
+            CheckDisposed();
             using (var sn = this.CreateSnapshot())
             using (var iterator = this.CreateIterator(new ReadOptions { Snapshot = sn }))
             {
@@ -429,6 +440,15 @@ namespace LevelDB
                     iterator.Next();
                 }
             }
+        }
+
+        private void CheckDisposed()
+        {
+            if (!Disposed)
+            {
+                return;
+            }
+            throw new ObjectDisposedException(this.GetType().Name);
         }
     }
 }
