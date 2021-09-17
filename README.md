@@ -24,7 +24,7 @@ A Leveldb database has a name which corresponds to a directory on the system.  T
 ```csharp
 // Open a connection to a new DB and create if not found
 var options = new Options { CreateIfMissing = true };
-var db = new DB(options, @"C:\temp\tempdb");
+var db = new DB(@"C:\temp\tempdb", options);
 ```
 
 ## Closing a Database ##
@@ -101,7 +101,7 @@ As an alternative, atomic updates can be used as a safer alternative with a sync
 
 ```csharp
 var options = new Options { CreateIfMissing = true };
-using (var db = new DB(options, path))
+using (var db = new DB(path, options))
 {
 	db.Put("New York", "blue");
 
