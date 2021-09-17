@@ -40,7 +40,7 @@ The DB class also implements the IDisposable interface which allows you to use t
 
 ```csharp
 var options = new Options { CreateIfMissing = true };
-using (var db = new DB(options, @"C:\temp\tempdb")) 
+using (var db = new DB(@"C:\temp\tempdb", options)) 
 {
     // Use leveldb
 }
