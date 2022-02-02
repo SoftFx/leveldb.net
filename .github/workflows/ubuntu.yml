@@ -23,8 +23,8 @@ jobs:
       run: dotnet restore
 
     - name: Build
-      run: dotnet build --no-restore
+      run: dotnet build -a linux-x64 -c RELEASE --no-restore
     
     - name: Test x64
       run: dotnet test --no-build --verbosity normal 
-      working-directory: LevelDB.Tests/**/LevelDB.NET.Tests.dll
+      working-directory: LevelDB.Tests/bin/RELEASE/net5.0/LevelDB.NET.Tests.dll
