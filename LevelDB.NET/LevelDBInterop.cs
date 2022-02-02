@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using System.Text;
 
 namespace LevelDB
 {
@@ -12,9 +9,12 @@ namespace LevelDB
     {
         static LevelDBInterop()
         {
-            var name = Environment.Is64BitProcess ? "LevelDB64" : "LevelDB32";
             var assembly = Assembly.GetExecutingAssembly();
             var path = Path.Combine(Path.GetDirectoryName(assembly.Location), "LevelDB.dll");
+            var name = Environment.OSVersion.Platform == PlatformID.Unix
+                ? "LevelDBLinux"
+                : Environment.Is64BitProcess ? "LevelDB64" : "LevelDB32";
+
             byte[] contents;
             using (var input = assembly.GetManifestResourceStream("LevelDB.NET." + name + ".dll"))
             {
@@ -23,15 +23,17 @@ namespace LevelDB
             }
 
             if (!File.Exists(path) || !BuffersEqual(File.ReadAllBytes(path), contents))
-            {
                 File.WriteAllBytes(path, contents);
+
+            if (Environment.OSVersion.Platform != PlatformID.Unix)
+            {
+                var h = LoadLibrary(path);
+                if (h == IntPtr.Zero)
+                    throw new ApplicationException("Cannot load leveldb.dll");
             }
-            var h = LoadLibrary(path);
-            if (h == IntPtr.Zero)
-                throw new ApplicationException("Cannot load leveldb.dll");
         }
 
-        static bool BuffersEqual(byte[] left, byte[] right)
+        private static bool BuffersEqual(byte[] left, byte[] right)
         {
             if (left.Length != right.Length)
                 return false;
@@ -42,7 +44,7 @@ namespace LevelDB
         }
 
         [DllImport("kernel32", SetLastError = true, CharSet = CharSet.Unicode)]
-        static extern IntPtr LoadLibrary(string lpFileName);
+        private static extern IntPtr LoadLibrary(string lpFileName);
 
         #region DB
         [DllImport("LevelDB.dll", CallingConvention = CallingConvention.Cdecl)]
@@ -261,9 +263,9 @@ namespace LevelDB
             IntPtr /* void* */ state,
             IntPtr /* void (*)(void*) */ destructor,
             IntPtr
-            /* int (*compare)(void*,
-                              const char* a, size_t alen,
-                              const char* b, size_t blen) */
+                /* int (*compare)(void*,
+                                  const char* a, size_t alen,
+                                  const char* b, size_t blen) */
                 compare,
             IntPtr /* const char* (*)(void*) */ name);
 

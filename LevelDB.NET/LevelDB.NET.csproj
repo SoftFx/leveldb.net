@@ -24,9 +24,11 @@
   <ItemGroup>
     <None Remove="..\native\LevelDB32.dll" />
     <None Remove="..\native\LevelDB64.dll" />
+    <None Remove="..\native\LevelDBLinux.dll" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="..\native\LevelDB32.dll" />
     <EmbeddedResource Include="..\native\LevelDB64.dll" />
+    <EmbeddedResource Include="..\native\LevelDBLinux.dll" />
   </ItemGroup>
 </Project>
