@@ -1,4 +1,4 @@
-name: Linux
+name: ubuntu-net5.0
 
 on:
   push:

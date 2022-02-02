@@ -1,4 +1,4 @@
-name: WIN: dontenfx472
+name: windows-net472
 
 on: [push]
 
