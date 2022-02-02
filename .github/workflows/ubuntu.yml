@@ -17,7 +17,7 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 5.0.*
+        dotnet-version: 5.0.x
         
     - name: Restore dependencies
       run: dotnet restore
@@ -27,4 +27,4 @@ jobs:
     
     - name: Test x64
       run: dotnet test --no-build --verbosity normal 
-      working-directory: LevelDB.Tests/
+      working-directory: LevelDB.Tests/**/LevelDB.NET.Tests.dll
