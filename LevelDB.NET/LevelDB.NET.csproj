@@ -5,7 +5,7 @@
     <OldToolsVersion>15.0</OldToolsVersion>
     <Company>Soft-Fx</Company>
     <Authors>Soft-Fx, Siarhei Hanich</Authors>
-    <Description>Open source leveldb wrapper for Windows and Lunux using .NET Standard 2.0</Description>
+    <Description>Open source leveldb wrapper for Windows and Linux using .NET Standard 2.0</Description>
     <PackageTags>#leveldb</PackageTags>
     <RepositoryUrl>https://github.com/SoftFx/leveldb.net</RepositoryUrl>
     <PackageId>SoftFX.LevelDB.Standard</PackageId>
