@@ -9,7 +9,7 @@ on:
 jobs:
   build:
 
-    runs-on: linux-latest
+    runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v2
@@ -26,5 +26,5 @@ jobs:
       run: dotnet build --no-restore
     
     - name: Test x64
-      run: dotnet test --verbosity normal --framework net5.0 --runtime win-x64
+      run: dotnet test --no-build --verbosity normal 
       working-directory: LevelDB.Tests/
