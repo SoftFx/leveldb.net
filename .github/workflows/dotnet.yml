@@ -1,4 +1,4 @@
-name: WIN: .NET
+name: windows-net5.0
 
 on:
   push:
