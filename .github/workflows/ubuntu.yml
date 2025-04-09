@@ -1,6 +1,7 @@
 name: ubuntu-net5.0
 
 on:
+  workflow_dispatch:
   push:
     branches: [ master ]
   pull_request:
