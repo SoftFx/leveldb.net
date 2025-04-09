@@ -94,7 +94,7 @@ namespace LevelDB
         [DllImport("LevelDB.dll", CallingConvention = CallingConvention.Cdecl)]
         public static extern void leveldb_destroy_db(IntPtr /* Options*/ options, string name, out IntPtr error);
 
-        [DllImport("leveldb", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("Leveldb", CallingConvention = CallingConvention.Cdecl)]
         public static extern void leveldb_compact_range(IntPtr db, byte[] startKey, IntPtr startKeyLen, byte[] limitKey, IntPtr limitKeyLen);
 
         #region extensions
