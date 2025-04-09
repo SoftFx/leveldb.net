@@ -199,5 +199,11 @@ namespace LevelDB.NET.Tests
             Assert.IsFalse(iter.IsValid);
         }
 
+        [Test]
+        public void TestCompact()
+        {
+            TestCRUD();
+            Database.Compact();
+        }
     }
 }
