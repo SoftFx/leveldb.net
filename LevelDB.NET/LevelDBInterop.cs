@@ -30,7 +30,7 @@ namespace LevelDB
             {
                 var h = LoadLibrary(path);
                 if (h == IntPtr.Zero)
-                    throw new ApplicationException("Cannot load leveldb.dll");
+                    throw new ApplicationException($"Cannot load {dllFileName}");
             }
         }
 
