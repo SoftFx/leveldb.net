@@ -9,7 +9,7 @@ namespace LevelDB
     {
         static LevelDBInterop()
         {
-            const private string dllFileName = "leveldb.dll";
+            var dllFileName = "leveldb.dll";
             var assembly = Assembly.GetExecutingAssembly();
             var path = Path.Combine(Path.GetDirectoryName(assembly.Location), dllFileName);
             var name = Environment.OSVersion.Platform == PlatformID.Unix
