@@ -1,4 +1,4 @@
-name: ubuntu-net5.0
+name: ubuntu-net8.0
 
 on:
   workflow_dispatch:
