@@ -27,5 +27,5 @@ jobs:
       run: dotnet build --configuration Release --no-restore
     
     - name: Test x64
-      run: dotnet test --configuration Release --framework net5.0 --verbosity normal 
+      run: dotnet test --configuration Release --framework net8.0 --verbosity normal 
       working-directory: LevelDB.Tests/
