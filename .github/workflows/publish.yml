@@ -3,11 +3,19 @@ name: Publish packages
 on:
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
   build:
 
     runs-on: windows-latest
     environment: Nuget
+    permissions:
+      contents: read
+      id-token: write # OIDC token for nuget.org Trusted Publishing
+    outputs:
+      version: ${{ steps.version.outputs.version }}
 
     steps:
     - uses: actions/checkout@v4
@@ -17,16 +25,53 @@ jobs:
       with:
         dotnet-version: 8.0.x
 
+    - name: Read version from csproj
+      id: version
+      shell: bash
+      run: |
+        set -euo pipefail
+        version=$(sed -n 's:.*<Version>\(.*\)</Version>.*:\1:p' LevelDB.NET/LevelDB.NET.csproj | head -1 | tr -d ' \r\n')
+        if [ -z "$version" ]; then
+          echo "::error::could not read <Version> from LevelDB.NET/LevelDB.NET.csproj"
+          exit 1
+        fi
+        echo "version=$version" >> "$GITHUB_OUTPUT"
+
     - name: Restore dependencies
       run: dotnet restore
-      working-directory: ${{env.GITHUB_WORKSPACE}}
 
     - name: Build
       run: dotnet build --configuration Release --no-restore
-      working-directory: ${{env.GITHUB_WORKSPACE}}
 
-    - name: Publish SoftFX.LevelDB.Standard
-      uses: brandedoutcast/publish-nuget@v2.5.2
+    - name: Pack SoftFX.LevelDB.Standard
+      run: dotnet pack LevelDB.NET/LevelDB.NET.csproj --configuration Release --no-build --output out
+
+    # Exchanges the job's GitHub OIDC token for a short-lived nuget.org API key.
+    # Requires a Trusted Publishing policy on nuget.org (package owner: SoftFx,
+    # repository: SoftFx/leveldb.net, workflow: publish.yml, environment: Nuget)
+    # owned by the nuget.org user in vars.NUGET_USER.
+    - name: NuGet login (trusted publishing)
+      id: nuget-login
+      uses: NuGet/login@v1
       with:
-          PROJECT_FILE_PATH: LevelDB.NET/LevelDB.NET.csproj
-          NUGET_KEY: ${{secrets.NUGET_KEY}}
+        user: ${{ vars.NUGET_USER }}
+
+    # No --skip-duplicate: publishing a version that is already on nuget.org fails
+    # loudly instead of passing without a release.
+    - name: Push SoftFX.LevelDB.Standard
+      shell: bash
+      run: dotnet nuget push "out/SoftFX.LevelDB.Standard.${{ steps.version.outputs.version }}.nupkg" --api-key "${{ steps.nuget-login.outputs.NUGET_API_KEY }}" --source https://api.nuget.org/v3/index.json
+
+  tag:
+    # Only after the push succeeded, so a failed publish leaves no release tag.
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # pushes the v* tag
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Push tag v${{ needs.build.outputs.version }}
+      run: |
+        git tag "v${{ needs.build.outputs.version }}"
+        git push origin "v${{ needs.build.outputs.version }}"
