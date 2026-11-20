@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>1.2.1</Version>
+    <Version>1.2.2</Version>
     <OldToolsVersion>15.0</OldToolsVersion>
     <Company>Soft-Fx</Company>
     <Authors>Soft-Fx, Siarhei Hanich</Authors>
@@ -10,7 +10,7 @@
     <RepositoryUrl>https://github.com/SoftFx/leveldb.net</RepositoryUrl>
     <PackageId>SoftFX.LevelDB.Standard</PackageId>
     <PackageProjectUrl>https://github.com/SoftFx/leveldb.net</PackageProjectUrl>
-    <PackageReleaseNotes></PackageReleaseNotes>
+    <PackageReleaseNotes>1.2.2: the Linux x64 native library is rebuilt as LevelDB 1.23 with Snappy linked in statically. Up to 1.2.1 it was LevelDB 1.22 without Snappy, so SnappyCompression was silently ignored on Linux and databases written on Windows could not be opened there. Existing databases open unchanged. Snappy is LevelDB's default, so on Linux tables written from now on are compressed unless CompressionLevel is set to NoCompression, and a Linux library older than 1.2.2 cannot read them: to keep a downgrade possible, set NoCompression until it is no longer needed. Windows libraries and the API are unchanged.</PackageReleaseNotes>
     <Copyright></Copyright>
     <PackageLicenseExpression>MPL-2.0</PackageLicenseExpression>
   </PropertyGroup>

@@ -1,0 +1,6 @@
+# LevelDB database files used as test fixtures. CURRENT is a text file whose last byte must be
+# "\n": a CRLF checkout turns it into "MANIFEST-000002\r" and the database no longer opens.
+LevelDB.Tests/Fixtures/** binary
+
+# Shell scripts run inside Linux containers.
+*.sh text eol=lf

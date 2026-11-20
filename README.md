@@ -188,3 +188,21 @@ using (var db = new Db(path, options))
 }
 ```
 
+
+# Native libraries #
+
+The package embeds one native LevelDB library per platform (`native/`) and extracts the right one at run time.
+
+| File | Platform | LevelDB | Snappy |
+|---|---|---|---|
+| `LevelDB64.dll` | Windows x64 | 1.23 | yes |
+| `LevelDB32.dll` | Windows x86 | 1.23 | yes |
+| `LevelDBLinux.dll` | Linux x64: glibc 2.14+, libstdc++ of GCC 6+ | 1.23 | yes, linked statically |
+
+The Linux library is built by `cross_compile_scripts/build-linux-x64.sh` (Docker, pinned sources and image); the script fails if the result has no Snappy. The Windows libraries are unchanged in 1.2.2.
+
+Up to 1.2.1 the Linux library was LevelDB 1.22 built without Snappy: `CompressionLevel.SnappyCompression` was silently ignored there, and a database written on Windows could not be opened on Linux. Since 1.2.2 both work. Databases written by older versions open unchanged; LevelDB records the compression of each block, so old uncompressed blocks are read as they are and are compressed when a compaction rewrites them.
+
+**Downgrade on Linux.** Snappy is LevelDB's default, so with 1.2.2 every table written on Linux is Snappy-compressed unless the caller sets `CompressionLevel = CompressionLevel.NoCompression`, even if the caller never set a compression level. LevelDB writes tables not only on `Put`: also when it opens a database with a non-empty log and during background compactions. A Linux library older than 1.2.2 cannot read Snappy blocks (`Corruption: corrupted compressed block contents`), so after 1.2.2 has opened a database for writing on Linux, 1.2.1 may no longer open it. To keep a downgrade possible, set `NoCompression` until it is no longer needed. Windows is not affected: its libraries have always used Snappy.
+
+`LevelDB.Tests/CompressionTests.cs` checks compression and reading the databases 1.2.1 wrote on both platforms; run the tests on Linux and on Windows after replacing a native library.
